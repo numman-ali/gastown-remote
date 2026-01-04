@@ -4,7 +4,7 @@
 # Installs Claude Code, Gas Town (gt/bd), and supporting tools on a fresh VPS
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/xxx/gastown-remote/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/numman-ali/gastown-remote/main/install.sh | bash
 #   # or
 #   ./install.sh
 #

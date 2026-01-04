@@ -34,7 +34,7 @@ export default function RootLayout({
                 Deploy
               </a>
               <a
-                href="https://github.com/xxx/gastown-remote"
+                href="https://github.com/numman-ali/gastown-remote"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors"
@@ -49,7 +49,7 @@ export default function RootLayout({
           <div className="max-w-5xl mx-auto px-4 py-8 text-center text-gray-500 text-sm">
             <p>Open source. Free forever. Your tokens never leave your device.</p>
             <p className="mt-2">
-              <a href="https://github.com/xxx/gastown-remote" className="underline hover:text-gray-300">
+              <a href="https://github.com/numman-ali/gastown-remote" className="underline hover:text-gray-300">
                 View on GitHub
               </a>
             </p>

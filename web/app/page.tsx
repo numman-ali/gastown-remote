@@ -20,7 +20,7 @@ export default function Home() {
             Deploy Now →
           </Link>
           <a
-            href="https://github.com/xxx/gastown-remote"
+            href="https://github.com/numman-ali/gastown-remote"
             target="_blank"
             rel="noopener noreferrer"
             className="border border-gray-700 hover:border-gray-500 px-8 py-4 rounded-lg text-lg transition-colors touch-target"
@@ -105,7 +105,7 @@ export default function Home() {
               <li>✓ One-click deploys</li>
             </ul>
             <a
-              href="https://github.com/xxx/gastown-remote/fork"
+              href="https://github.com/numman-ali/gastown-remote/fork"
               target="_blank"
               rel="noopener noreferrer"
               className="block text-center border border-gray-600 hover:border-gray-400 px-4 py-3 rounded-lg transition-colors"
@@ -129,7 +129,7 @@ export default function Home() {
               <li>✓ Scriptable</li>
             </ul>
             <a
-              href="https://github.com/xxx/gastown-remote#quick-start-hetzner"
+              href="https://github.com/numman-ali/gastown-remote#cli-script"
               target="_blank"
               rel="noopener noreferrer"
               className="block text-center border border-gray-600 hover:border-gray-400 px-4 py-3 rounded-lg transition-colors"

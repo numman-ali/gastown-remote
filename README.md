@@ -1,6 +1,40 @@
-# Gas Town Remote
+<p align="center">
+  <img src="assets/banner.svg" alt="gastown-remote" width="500">
+</p>
 
-Always-on AI agent orchestration in the cloud. Run [Gas Town](https://github.com/steveyegge/gastown) on a VPS, access from anywhere via Tailscale.
+<p align="center">
+  <a href="https://github.com/numman-ali/gastown-remote/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
+  </a>
+  <a href="https://github.com/steveyegge/gastown">
+    <img src="https://img.shields.io/badge/gas%20town-compatible-orange.svg" alt="Gas Town Compatible">
+  </a>
+  <a href="https://tailscale.com">
+    <img src="https://img.shields.io/badge/tailscale-ready-00ADD8.svg" alt="Tailscale Ready">
+  </a>
+  <a href="https://twitter.com/nummanali">
+    <img src="https://img.shields.io/twitter/follow/nummanali?style=social" alt="Follow on Twitter">
+  </a>
+</p>
+
+<p align="center">
+  <strong>Always-on AI agent orchestration in the cloud.</strong><br>
+  Deploy <a href="https://github.com/steveyegge/gastown">Gas Town</a> to a VPS. Access from your phone via Tailscale. ~$4/month.
+</p>
+
+---
+
+## The Problem
+
+You want AI agents working for you 24/7, but:
+
+- **Laptop dependency** — Agents die when you close your laptop
+- **No mobile access** — Can't check on agents from your phone
+- **Complex setups** — Docker, Kubernetes, container orchestration overkill
+
+## The Solution
+
+**gastown-remote** gives you an always-on AI workshop in the cloud. SSH in from anywhere, pick up where you left off, and let your agents keep running while you sleep.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -8,9 +42,7 @@ Always-on AI agent orchestration in the cloud. Run [Gas Town](https://github.com
 │                           │                                     │
 │                           ▼                                     │
 │  ┌───────────────────────────────────────────────────────────┐  │
-│  │                   HETZNER VPS ($4/mo)                     │  │
-│  │                                                           │  │
-│  │  ssh gastown@your-tailnet → tmux attach → claude          │  │
+│  │                   HETZNER VPS (~$4/mo)                    │  │
 │  │                                                           │  │
 │  │  ┌─────────────────────────────────────────────────────┐  │  │
 │  │  │  tmux: main                                         │  │  │
@@ -18,118 +50,119 @@ Always-on AI agent orchestration in the cloud. Run [Gas Town](https://github.com
 │  │  │  └── Gas Town (gt/bd - agent orchestration)         │  │  │
 │  │  └─────────────────────────────────────────────────────┘  │  │
 │  │                                                           │  │
+│  │  ssh gastown@your-server → tmux attach → claude          │  │
 │  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Why?
-
-- **Always-on**: Your AI agents run 24/7, not just when your laptop is open
-- **Access from anywhere**: SSH from your phone via Tailscale
-- **Cheap**: ~$4/month on Hetzner CX22
-- **Simple**: Bare metal, systemd, tmux - no Docker complexity
-- **Open source**: Deploy your own, customize everything
+---
 
 ## Three Ways to Deploy
 
-Choose the method that works best for you:
+Choose what works for you. All three get you to the same destination.
 
 | Method | Best For | Requirements |
 |--------|----------|--------------|
-| [🌐 Web Wizard](#option-1-web-wizard-recommended) | Everyone, phone-friendly | Just a browser |
-| [🔧 GitHub Actions](#option-2-github-actions) | Automated deploys | GitHub account |
-| [💻 CLI Script](#option-3-cli-laptop) | Power users | Laptop + terminal |
+| [Web Wizard](#-web-wizard) | Everyone, phone-friendly | Just a browser |
+| [GitHub Actions](#-github-actions) | Automated deploys | GitHub account |
+| [CLI Script](#-cli-script) | Power users | Laptop + terminal |
 
 ---
 
-## Option 1: Web Wizard (Recommended)
+## Web Wizard
 
 **No laptop needed. No tokens shared with us.**
 
-1. Visit **[gastown.dev](https://gastown.dev)** (or run locally: `cd web && npm run dev`)
-2. Enter your server name and Tailscale auth key
-3. Copy the generated config
-4. Paste into Hetzner console when creating server
-5. Wait 3-5 minutes, connect via Tailscale
+The wizard generates a cloud-init config entirely in your browser. You paste it into Hetzner's console. Your credentials never touch our servers.
 
-**Your credentials never leave your browser.**
+<p align="center">
+  <strong>→ <a href="https://gastown.dev">gastown.dev</a> ←</strong><br>
+  <sub>or run locally: <code>cd web && npm run dev</code></sub>
+</p>
+
+### How It Works
+
+1. **Enter your details** — Server name + Tailscale auth key
+2. **Copy the config** — Generated client-side in your browser
+3. **Paste into Hetzner** — Cloud config field when creating server
+4. **Wait 3-5 minutes** — Server boots, installs everything, joins Tailscale
+5. **Connect** — `ssh gastown@your-server`
 
 ---
 
-## Option 2: GitHub Actions
+## GitHub Actions
 
 **Phone-friendly via GitHub mobile app.**
 
-### Setup (one-time)
+Fork once, add secrets, trigger deployments from anywhere.
 
-1. **Fork this repo** → [Fork on GitHub](https://github.com/xxx/gastown-remote/fork)
+### Setup
 
-2. **Add secrets** (Settings → Secrets → Actions):
-   - `HETZNER_TOKEN` - Get from [console.hetzner.cloud](https://console.hetzner.cloud)
-   - `TAILSCALE_KEY` - Get from [tailscale.com/admin/settings/keys](https://login.tailscale.com/admin/settings/keys)
+```bash
+# 1. Fork this repo
+gh repo fork numman-ali/gastown-remote --clone=false
 
-3. **Run workflow** (Actions → "Deploy Gas Town" → Run workflow)
+# 2. Add secrets (Settings → Secrets → Actions)
+#    - HETZNER_TOKEN: from console.hetzner.cloud
+#    - TAILSCALE_KEY: from tailscale.com/admin/settings/keys
 
-4. **Connect** when done:
-   ```bash
-   ssh gastown@gastown
-   ```
+# 3. Trigger workflow (Actions → "Deploy Gas Town" → Run workflow)
+```
+
+### From Your Phone
+
+1. Open GitHub app
+2. Navigate to your fork
+3. Actions → Deploy Gas Town → Run workflow
+4. Wait for completion, connect via Tailscale
 
 ---
 
-## Option 3: CLI (Laptop)
+## CLI Script
 
-**Full control via terminal.**
-
-### Prerequisites
-
-- [Hetzner account](https://console.hetzner.cloud) with API token
-- [Tailscale account](https://tailscale.com) with auth key
-- `hcloud` CLI: `brew install hcloud` (macOS) or [install guide](https://github.com/hetznercloud/cli)
-
-### Deploy
+**Full control for power users.**
 
 ```bash
-# Clone this repo
-git clone https://github.com/xxx/gastown-remote.git
+# Clone
+git clone https://github.com/numman-ali/gastown-remote.git
 cd gastown-remote
 
-# Deploy to Hetzner
+# Deploy
 ./deploy/hetzner/deploy.sh \
   --tailscale-key tskey-auth-xxxxx \
   --hetzner-token xxxxx
 
-# Wait ~3 minutes, then connect:
+# Connect (after ~3 minutes)
 ssh gastown@gastown
 ```
 
-### Custom options
+### Options
 
 ```bash
 ./deploy/hetzner/deploy.sh \
-  --name my-gastown \
-  --type cx32 \           # 8GB RAM (default: cx22)
-  --location ash \        # US East (default: nbg1)
+  --name my-gastown \          # Tailscale hostname (default: gastown)
+  --type cx32 \                # 8GB RAM (default: cx22 / 4GB)
+  --location ash \             # US East (default: nbg1 / Germany)
   --tailscale-key xxx \
   --hetzner-token xxx
 ```
 
 ---
 
-## First-Time Setup (All Methods)
+## First-Time Setup
 
-After your server is running, connect and authenticate:
+After your server is running, authenticate your tools:
 
 ```bash
-# Connect via Tailscale
+# Connect
 ssh gastown@gastown
 
-# Authenticate Claude Code (one-time)
+# Claude Code (one-time)
 claude
 > /login
 # Follow browser link, paste code
 
-# Authenticate GitHub (one-time)
+# GitHub CLI (one-time)
 gh auth login
 
 # Initialize Gas Town
@@ -141,32 +174,20 @@ gt rig add myproject https://github.com/you/repo.git
 
 ---
 
-## Daily Usage
-
-```bash
-# From your phone or any device with Tailscale
-ssh gastown
-
-# You're automatically in tmux with Claude ready
-claude
-```
-
----
-
-## Architecture
-
-No Docker. Just a VPS with:
+## What You Get
 
 | Component | Purpose |
 |-----------|---------|
-| **Tailscale** | Secure access from anywhere |
+| **Tailscale** | Secure access from anywhere (phone, laptop, tablet) |
 | **tmux** | Persistent sessions that survive disconnects |
-| **Claude Code** | Your AI coding assistant |
+| **Claude Code** | AI coding assistant |
 | **Gas Town (gt/bd)** | Agent orchestration framework |
-| **systemd** | Service management |
+| **systemd** | Auto-restart on reboot |
+
+### Stack
 
 ```
-Hetzner VPS (Ubuntu 24.04)
+Ubuntu 24.04 LTS
 ├── tailscaled           ← Secure networking
 ├── systemd
 │   └── gastown-tmux     ← Persistent tmux session
@@ -179,7 +200,7 @@ Hetzner VPS (Ubuntu 24.04)
 
 ## Mobile Access
 
-### Recommended SSH Apps
+### Recommended Apps
 
 | Platform | App | Notes |
 |----------|-----|-------|
@@ -188,18 +209,31 @@ Hetzner VPS (Ubuntu 24.04)
 | Android | [Termux](https://termux.dev) | Install Tailscale via F-Droid |
 | Android | [JuiceSSH](https://juicessh.com) | Simple, works with Tailscale |
 
-### tmux Tips for Mobile
+### tmux Tips
 
-The config is optimized for mobile:
-- `Ctrl-a` prefix (easier than `Ctrl-b` on phone keyboards)
-- Mouse support enabled
-- Larger scrollback buffer
+Config is optimized for mobile:
+
+- **Prefix**: `Ctrl-a` (easier than `Ctrl-b` on phone keyboards)
+- **Mouse**: Enabled
+- **Scrollback**: 50,000 lines
+
+---
+
+## Cost
+
+| Provider | Plan | Specs | Monthly |
+|----------|------|-------|---------|
+| **Hetzner** | CX22 | 2 vCPU, 4GB RAM, 40GB SSD | ~$4 |
+| Hetzner | CX32 | 4 vCPU, 8GB RAM, 80GB SSD | ~$8 |
+| DigitalOcean | Basic | 1 vCPU, 2GB RAM, 50GB SSD | ~$12 |
+
+CX22 is plenty for most Gas Town workloads.
 
 ---
 
 ## Bring Your Own VPS
 
-Run on any Ubuntu 22.04+ VPS:
+Run on any Ubuntu 22.04+ server:
 
 ```bash
 # SSH to your VPS
@@ -215,37 +249,22 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up --ssh
 
 # Clone and install
-git clone https://github.com/xxx/gastown-remote.git
+git clone https://github.com/numman-ali/gastown-remote.git
 ./gastown-remote/install.sh
 ```
-
----
-
-## Cost
-
-| Provider | Plan | Specs | Monthly |
-|----------|------|-------|---------|
-| Hetzner | CX22 | 2 vCPU, 4GB RAM, 40GB SSD | ~$4 |
-| Hetzner | CX32 | 4 vCPU, 8GB RAM, 80GB SSD | ~$8 |
-| DigitalOcean | Basic | 1 vCPU, 2GB RAM, 50GB SSD | ~$12 |
-
-CX22 is plenty for most Gas Town workloads.
 
 ---
 
 ## Updates
 
 ```bash
-ssh gastown
-
 # Pull latest
-cd ~/gastown-remote
-git pull
+cd ~/gastown-remote && git pull
 
 # Re-run install (idempotent)
 ./install.sh
 
-# Update Gas Town binaries
+# Update Gas Town
 go install github.com/steveyegge/gastown/cmd/gt@latest
 go install github.com/steveyegge/beads/cmd/bd@latest
 ```
@@ -254,7 +273,8 @@ go install github.com/steveyegge/beads/cmd/bd@latest
 
 ## Troubleshooting
 
-### Can't connect via Tailscale
+<details>
+<summary><strong>Can't connect via Tailscale</strong></summary>
 
 ```bash
 # Check status (via Hetzner console)
@@ -263,21 +283,26 @@ tailscale status
 # Re-authenticate
 sudo tailscale up --ssh --reset
 ```
+</details>
 
-### tmux session lost
+<details>
+<summary><strong>tmux session lost</strong></summary>
 
 ```bash
 sudo systemctl status gastown-tmux
 sudo systemctl restart gastown-tmux
 ```
+</details>
 
-### Claude Code auth issues
+<details>
+<summary><strong>Claude Code auth issues</strong></summary>
 
 ```bash
 claude
 > /logout
 > /login
 ```
+</details>
 
 ---
 
@@ -306,10 +331,38 @@ gastown-remote/
 
 ---
 
+## Philosophy
+
+> **No Docker. No Kubernetes. No complexity.**
+
+Just a VPS with tmux and systemd. Simple infrastructure that you can understand, debug, and trust. Your AI agents run in persistent sessions that survive disconnects, reboots, and network hiccups.
+
+The goal is **zero friction** between you and your agents. SSH in, you're there. Close your phone, they keep working.
+
+---
+
+## Related Projects
+
+- **[Gas Town](https://github.com/steveyegge/gastown)** — The agent orchestration framework
+- **[n-skills](https://github.com/numman-ali/n-skills)** — Universal AI agent skills marketplace
+- **[cc-mirror](https://github.com/numman-ali/cc-mirror)** — Multi-provider Claude Code variants
+
+---
+
 ## Contributing
 
-Issues and PRs welcome. This is open source and free to use.
+Issues and PRs welcome. This project is open source and free to use.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE)
+
+---
+
+<p align="center">
+  <sub>Built by <a href="https://github.com/numman-ali">@numman-ali</a> · <a href="https://twitter.com/nummanali">@nummanali</a></sub>
+</p>

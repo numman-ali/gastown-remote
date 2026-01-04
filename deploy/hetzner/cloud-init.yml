@@ -57,7 +57,7 @@ runcmd:
   - tailscale up --auth-key={{TAILSCALE_AUTH_KEY}} --ssh --hostname=gastown
 
   # Clone gastown-remote repo
-  - su - gastown -c "git clone https://github.com/xxx/gastown-remote.git /home/gastown/gastown-remote || true"
+  - su - gastown -c "git clone https://github.com/numman-ali/gastown-remote.git /home/gastown/gastown-remote || true"
 
   # Run install script
   - su - gastown -c "chmod +x /home/gastown/gastown-remote/install.sh && /home/gastown/gastown-remote/install.sh"
