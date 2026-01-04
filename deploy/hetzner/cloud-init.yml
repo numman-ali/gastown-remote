@@ -1,0 +1,70 @@
+#cloud-config
+#
+# Gas Town Remote - Cloud Init Configuration
+# Bootstrap a fresh Hetzner VPS for Gas Town
+#
+# This runs on first boot and:
+# 1. Creates the gastown user
+# 2. Installs Tailscale
+# 3. Clones the gastown-remote repo
+# 4. Runs the install script
+#
+# Variables to replace:
+#   {{TAILSCALE_AUTH_KEY}} - Your Tailscale auth key (ephemeral recommended)
+#   {{SSH_PUBLIC_KEY}} - Your SSH public key (optional, Tailscale SSH works without)
+
+users:
+  - name: gastown
+    groups: sudo
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - {{SSH_PUBLIC_KEY}}
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - git
+  - tmux
+  - jq
+  - unzip
+  - ca-certificates
+  - gnupg
+
+write_files:
+  - path: /etc/motd
+    content: |
+
+       ╔═══════════════════════════════════════════════════════════╗
+       ║                    GAS TOWN REMOTE                        ║
+       ║                                                           ║
+       ║  Connect: ssh gastown@<hostname>                          ║
+       ║  Attach:  tmux attach -t main                             ║
+       ║  Claude:  claude                                          ║
+       ╚═══════════════════════════════════════════════════════════╝
+
+
+  - path: /home/gastown/.hushlogin
+    content: ""
+
+runcmd:
+  # Install Tailscale
+  - curl -fsSL https://tailscale.com/install.sh | sh
+
+  # Authenticate Tailscale (use auth key for unattended setup)
+  - tailscale up --auth-key={{TAILSCALE_AUTH_KEY}} --ssh --hostname=gastown
+
+  # Clone gastown-remote repo
+  - su - gastown -c "git clone https://github.com/xxx/gastown-remote.git /home/gastown/gastown-remote || true"
+
+  # Run install script
+  - su - gastown -c "chmod +x /home/gastown/gastown-remote/install.sh && /home/gastown/gastown-remote/install.sh"
+
+  # Ensure tmux session is running
+  - systemctl start gastown-tmux.service || true
+
+final_message: |
+  Gas Town Remote provisioned successfully!
+  Connect via Tailscale: ssh gastown@gastown

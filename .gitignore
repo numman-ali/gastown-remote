@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (never commit these)
+*.pem
+*.key
+secrets/
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.log
+/tmp/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+/dist/
+/build/
